@@ -1,0 +1,74 @@
+<html>
+<body>
+<input type ="text" id="message_text"> <input onclick="sendMessage();" type="button">
+
+<br><br><br><br><br>
+<font color="green"><p id="m"> messages </p> </font>
+<script>
+function sendMessage() {
+     //document.getElementById("p1").innerHTML = "New text!";
+    var inputField = document.getElementById('message_text');
+    var text = inputField.value;
+    if(inputField) {
+
+      
+      alert(text);
+
+        var xmlHttp = createXmlHttp();
+        xmlHttp.onreadyexchange = function() {
+            if(xmlHttp.readyState == 4) {
+                if(xmlHttp.responseText != 'OK') {
+                alert('ERROR: ' + xmlHttp.responseText)
+            }
+           alert("ready state == 4");
+        }
+    } 
+
+      var parseString = 'text=' + escape(text);
+        xmlHttp.open("POST",'/sendmsg',true);
+        xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlHttp.send(parseString);
+        document.getElementById('m').innerHTML = document.getElementById('m').innerHTML + '<br>' +  text; 
+    }
+
+    // CREATE XML
+
+function createXmlHttp() {
+	var xmlhttp;
+
+		if (window.XMLHttpRequest) {
+    		xmlhttp = new XMLHttpRequest();
+		} 
+	else {
+    	xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+
+	if (!(xmlhttp)) {
+    	alert("Your browser does not support AJAX!");
+	}
+
+	return xmlhttp;
+
+}  
+
+        /*
+        xmlhttp.onreadyexchange = function() {
+            if(xmlHttp.readyState == 4) {
+                if(xmlHttp.responseText != 'OK') {
+                    alert("Error:" + xmlHttp.responseText)
+                }
+            }
+        }
+        var parseString = 'text=' + escape(text);
+        xmlHttp.open("POST",'/sendmsg',true):
+        xmlHttp.setRequestHeader("Content-type","application/x-wwww-form-urlencoded");
+        xmlHttp.send(parseString);  
+    }   */
+
+
+
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<messages>
+{% for message in messages %}
+	<message user = "{{message.user}}">
+		{{message.message_text}}
+	</message>
+	{% endfor %}
+</messages>

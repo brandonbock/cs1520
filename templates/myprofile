@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Dark Admin</title>
+
+    <link rel="stylesheet" type="text/css" href="static/bootstrap.min.css" /> 
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/local.css" />
+
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+
+    <style>
+        img {
+            filter: gray; /* IE6-9 */
+            -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+            -webkit-box-shadow: 0px 2px 6px 2px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 2px 6px 2px rgba(0,0,0,0.75);
+            box-shadow: 0px 2px 6px 2px rgba(0,0,0,0.75);
+            margin-bottom: 20px;
+        }
+        img:hover {
+            filter: none; /* IE6-9 */
+            -webkit-filter: grayscale(0); /* Google Chrome, Safari 6+ & Opera 15+ */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="wrapper">
+
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">{{ curruser }}</a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li><a href="/myprofile"><i class="fa fa-bullseye"></i> My Profile</a></li>
+                    <li><a href="/portfolio"><i class="fa fa-bullseye"></i> Matches</a></li>
+                    <li><a href="/goals"><i class="fa fa-bullseye"></i> My Goals</a></li>
+                    
+                             
+                </ul>
+             
+                </ul>
+            </div>
+        </nav>
+
+        <hr />
+
+        <div class="container">
+            <div class="row">
+                <div class="text-center">
+                    <h1>My Matches</h1>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="well">
+                            
+                            <img class="thumbnail img-responsive" alt="" src="http://media-minecraftforum.cursecdn.com/avatars/336/363/635357691690366795.gif" />
+                         
+                            <span>
+                         Name : {{mem.fname}} {{mem.lname}}
+                        <br>
+                         Gender: {{mem.gender}} 
+                         <br>
+                        Contact: {{mem.email}} 
+                         <br>
+                         Cardio: {{mem.habit_cardio}}
+                          <br>
+                            Abs: {{mem.habit_abs}}
+                          <br>
+                            Upper Body: {{mem.habit_upperbody}}
+                          <br>
+                            Treadmill: {{mem.habit_treadmill}}
+                          <br>
+                            Yoga: {{mem.habit_yoga}}
+                          <br>
+                            Gain Weight: {{mem.goal_gain}}
+                          <br>
+                            Lose Weight: {{mem.goal_lose}}
+                          <br>
+                            Endurance: {{mem.goal_endurance}}
+                          <br>
+
+                         Weight: {{habit_weight}}
+                         {{mem.habit_weight}}
+                         {% if "{{mem.habit_weight}}" == "no" %}
+                          <p>equals</p>
+                         {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <br>
+        <br>
+        <br>
+        <br>
+<script>
+/*
+function sendMessage() {
+    var inputField = document.getElementById('message_text');
+    if(inputField) {
+        var text = inputField.value;
+
+        var xmlHttp = createXmlHttp();
+        xmlhttp.onreadyexchange = function() {
+            if(xmlHttp.readyState == 4) {
+                if(xmlHttp.responseText != 'OK') {
+                    alert("Error:" + xmlHttp.responseText)
+                }
+            }
+        }
+        var parseString = 'text=' + escape(text);
+        xmlHttp.open("POST",'/sendmsg',true):
+        xmlHttp.setRequestHeader("Content-type","application/x-wwww-form-urlencoded");
+        xmlHttp.send(parseString);
+    }
+
+
+
+}
+
+function createXmlHttp() {
+
+var xmlhttp;
+
+if (window.XMLHttpRequest) {
+
+xmlhttp = new XMLHttpRequest();
+
+} else {
+
+xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+
+}
+
+if (!(xmlhttp)) {
+
+alert("Your browser does not support AJAX!");
+
+}
+
+return xmlhttp;
+
+}   */
+</script>
+
+        <input type ="text" id="message_text"> <input onclick="sendMessage();" type="button">
+    </div>
+
+</body>
+</html>

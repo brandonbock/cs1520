@@ -1,0 +1,5 @@
+<html>
+<body>
+<input type ="text" id="message_text"> <input onclick="sendMessage();" type="button">
+</body>
+</html>
