@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Sportify</title>
+<style type="text/css">
+  /* BROWSER RESET */
+  @import url(http://fonts.googleapis.com/css?family=Roboto:700,400);
+  *{margin:0; padding:0; border:0; font-family:'Roboto', Arial, Helvetica, sans-serif; }
+
+  p { margin-bottom:10px; font-size:0.875em; line-height:18px; }
+
+  h1 { font-weight: normal; font-size:1.5em }
+
+  .inset-header
+  {
+     background-color:#eee;
+     margin:-4.5%;
+     padding:4.5%;
+     margin-bottom:4%;
+     border:solid 1px #e5e5e5;
+     position:relative;
+  }
+
+  .inset-header:before, .inset-header:after
+  {
+     content:' ';
+     height:0;
+     width:0;
+     position:absolute;
+     left:4%;
+     border:solid 7px transparent;
+  }
+
+  .inset-header:after
+  {
+     border-bottom-color:White;
+     bottom:-1px;
+     z-index:2;
+  }
+
+  .inset-header:before
+  {
+     border:solid 7px transparent;
+     border-bottom-color:#e5e5e5;
+     bottom:1px;
+     z-index:1;
+  }
+
+  ul, ol { margin-bottom:10px; }
+
+  li { margin-left: 25px; font-size:0.875em; line-height:18px; margin-bottom:0; }
+
+  ul ul, ul ol, ol ul, ol ol { padding-left:25px; }
+
+  input, textarea { border: solid 1px #ccc; padding:3px; box-shadow: inset 0 0 5px #eee; font-size: 14px; display:block; margin-bottom:10px; border-radius:3px; line-height:18px;}
+
+  textarea { width:300px; height:200px; }
+
+  input[type=submit]
+  {
+     background-color:#f44336;
+     color:White;
+     font-weight:bold;
+     border:none;
+     padding:7px;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    margin: 15.3px 0;
+    border:none;
+  }
+  input[type=range]:focus {
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background: #f44336;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 39px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -15.5px;
+  }
+  input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #f55a4e;
+  }
+  input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background: #f44336;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+  }
+  input[type=range]::-moz-range-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 39px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+  }
+  input[type=range]::-ms-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+  input[type=range]::-ms-fill-lower {
+    background: #f32c1e;
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  }
+  input[type=range]::-ms-fill-upper {
+    background: #f44336;
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  }
+  input[type=range]::-ms-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 39px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+    height: 8.4px;
+  }
+  input[type=range]:focus::-ms-fill-lower {
+    background: #f44336;
+  }
+  input[type=range]:focus::-ms-fill-upper {
+    background: #f55a4e;
+  }
+
+
+  .clear { clear:both; }
+  /* END BROWSER RESET */
+
+  body
+  {
+     background-color:#f9f9f9;
+  }
+
+  .wrapper
+  {
+     position:relative;
+     max-width:1060px;
+     margin:auto;
+     padding: 0 2%;
+  }
+
+
+  #header 
+  {
+     background-color:#f44336;
+     height:50px;
+     color:White;
+    overflow:hidden;
+  }
+
+  #header span
+  {
+     display:block;
+     float:left;
+     margin-top:2px;
+     font-size:2.25em;
+     font-weight:bold;
+  }
+
+  #header ul 
+  {
+     float:right;
+  }
+
+  #header ul li
+  {
+     display:block;
+     float:left;
+     margin-left:25px;
+     margin-top:15px;
+     font-size:1.125em;
+  }
+
+  .body
+  {
+     padding-bottom:2%;
+  }
+
+  .body .full-block, .body .half-block-left, .body .half-block-right
+  {
+     background-color:White;
+     padding:2%;
+     box-shadow:0 0 5px #eee;
+     margin-top:2%;
+  }
+  
+  .body .full-block:after, .body .half-block-left:after, .body .half-block-right:after
+  {
+    content:"";
+    display:table;
+    clear:both;
+  }
+
+  .body .half-block-left {
+     float:left;
+     width:45%;
+  }
+
+  .body .half-block-right {
+     float:right;
+     width:45%;
+  }
+  
+  .my-mini-profile 
+  {
+    margin-top: 40px;
+    font-size:1em;
+  }
+  
+  .my-mini-profile:first-line
+  {
+    font-size:1.25em;
+  }
+
+  .profile-picture 
+  {
+    background-color:#eee;
+    background-size:cover; 
+    background-position:center;
+    float:left;
+  }
+  
+  .pic-small
+  {
+    border-radius:50px; 
+    width:50px; 
+    height:50px; 
+  }
+  
+  .pic-medium
+  {
+    border-radius:80px; 
+    width:80px; 
+    height:80px; 
+  }
+  
+  .mini-profile
+  {
+    float:left;
+    width:48%;
+    margin-bottom:4%;
+  }
+  
+  .mini-profile:nth-child(even)
+  {
+    margin-right:4%;
+  }
+  
+  .mini-profile p
+  {
+    margin:0;
+    margin-left:60px;
+    padding-top:7px;
+    white-space:nowrap;
+    overflow:hidden;
+  }
+  
+  .mini-profile .profile-picture
+  {
+    filter:grayscale(50%);
+    -webkit-filter:grayscale(50%);
+  }
+  
+  .mini-profile:hover .profile-picture 
+  {
+    transform:scale(1.1,1.1);
+    filter:none;
+    -webkit-filter:none;
+  }
+  
+  @media (max-width: 900px)
+  {
+    .mini-profile .profile-picture
+    {
+      float:none;
+      margin:auto;
+    }
+    
+    .mini-profile p
+    {
+      margin:0;
+      text-align:center;
+    }
+  }
+  
+  @media (max-width: 750px)
+  {
+    .body .half-block-left, .body .half-block-right
+    {
+      float:none;
+      width:auto;
+    }
+    
+    .inset-header
+    {
+      margin:-2.1%;
+      margin-bottom:4%;
+    }
+    
+    .mini-profile
+    {
+      float:left;
+      width:30.6%;
+      margin-bottom:4%;
+      margin-right:4%;
+    }
+
+    .mini-profile:nth-child(3n+1)
+    {
+      margin-right:0;
+    }
+  }
+  
+  @media (max-width: 475px) {
+     #header 
+     { 
+        height: auto; 
+        padding-top:2px;
+     }
+     #header span 
+     { 
+        float:none; 
+        width:auto;
+        margin:auto; 
+        text-align:center;
+     }
+     #header .nav-container
+     {
+        position:relative;
+        left:50%;
+     }
+     #header ul {
+        float:left;
+        margin:auto;
+        margin-top:5px;
+        position:relative;
+        left:-50%;
+     }
+     #header ul li {
+        margin-left:10px;
+        margin-right:10px;
+     }
+    
+    .mini-profile
+    {
+      float:left;
+      width:48%;
+      margin-bottom:4%;
+      margin-right:0;
+    }
+
+    .mini-profile:nth-child(even)
+    {
+      margin-right:4%;
+    }
+   input[type=radio] {
+  display: inline;
+}
+   
+  }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="header">
+    <div class="wrapper">
+        <span id="templogo">Sportify</span>
+        <div class="nav-container">
+            <ul>
+                <li>Matches</li>
+                <li>Find</li>
+                <li>Russ</li>
+            </ul>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<div class="body wrapper">
+	{% block content %}{% endblock %}
+	<div class="clear"></div>
+</div>
+
+</body>
+</html>

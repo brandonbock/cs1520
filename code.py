@@ -6,6 +6,17 @@ import json
 from google.appengine.ext import ndb
 from google.appengine.api import users
 from google.appengine.ext.webapp import template
+from google.appengine.api import mail
+
+class ConfirmUserSignup(webapp2.RequestHandler):
+    def post(self):
+        user_address = self.request.get('addr')
+        sender_address = "jybra1520@gmail.com"
+        subject = "Confirm your registration"
+        body = "Thank you for signinup"
+
+        mail.send_mail(sender_address, user_address, subject, body)
+
 
 def render_template(handler, templatename,templatevalues):
 	path = os.path.join(os.path.dirname(__file__), 'templates/' + templatename)
@@ -46,11 +57,19 @@ class Matches(webapp2.RequestHandler):
 
 		members=User.query().fetch()
 		currUser = users.get_current_user()
+		q=User.query(ndb.GenericProperty("email") == currUser.email()).fetch(1)
+
+	#	q = User.query(all()
+		#q.filter("emai; =", "Smith")
+		
+ 		posts=InstantPost.query().fetch()
 		template_values = {
         'fname': range(1),
         'lname': range(7),
         'members': members,
         'curruser': currUser,
+        'currStats' : q,
+        'posts': posts,
     }
 
 		render_template(self,'portfolio.html',template_values)
@@ -88,6 +107,7 @@ class Goals(webapp2.RequestHandler):
 		'posts': posts,
         'fname': 'b',
         'lname': 'a'
+
     }
 		render_template(self,'goals.html',template_values)
 
@@ -134,6 +154,10 @@ class ProcessForm(webapp2.RequestHandler):
 
 		
 		user.put()
+		
+
+
+
 		self.redirect('portfolio')
 		
 		
@@ -153,6 +177,9 @@ class HandleMessage(webapp2.RequestHandler):
 
 		else:
 			self.response.out.write('You are not logged in brah')
+class Newsletter(webapp2.RequestHandler):
+	def get(self):
+		render_template(self,'newsletter.html','')
 
 class Ajax(webapp2.RequestHandler): 
 	def get(self):
@@ -249,7 +276,8 @@ app = webapp2.WSGIApplication([
 	('/sendmsg',HandleAjax),
 	('/messages',MessageXml),
 	('/ajax',Ajax),
-
+	('/su',ConfirmUserSignup),
+	('/newsletter',Newsletter)
 	
 	
 

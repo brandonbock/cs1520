@@ -65,13 +65,13 @@
                 <div class="text-center">
                     <h1>Ajax</h1>
                 </div>
-               <input type ="text" id="message_text"> <input onclick="sendMessage();" type="button">
-               
+                <form method="post" action="/su">
+            <input type = "text" name = "addr" placeholder="Email Address"> 
+            <input type = "submit">
+               </form>
                  <font color="white"> <p id="messages"> </p> </font>
             <br>
-            {% for curr in posts %}
-                <li class="list-group-item">{{curr.message_text}} </li>
-            {% endfor %}
+           
             <div id="p1"> </div>
                     
                 </div>

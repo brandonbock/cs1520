@@ -1,129 +1,108 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="half-block-left">
+    <h1 class="inset-header">My Profile</h1>
+    <div class="profile-picture pic-medium" style="margin-right:-5%;margin-bottom:4%;box-shadow:0 0 5px #eee;position:relative;left:-9%; background-image:url(https://scontent-lga.xx.fbcdn.net/hphotos-xaf1/v/t1.0-9/998712_10201566742429760_1837437532_n.jpg?oh=98969f9bdc1489785f37b2d6a4020d37&amp;oe=5580957B)"></div>
+    <p class="my-mini-profile"><strong>{{curruser.email}}</strong><br>Male - 23 Years Old</p>
+    <div class="clear"></div>
+    
+    <ul class="matches-my-profile">
+     <li><strong>Workout Habits:</strong></li>
+     <ul>
+        {% for mem in currStats %}
+       <li>Cardio: {{mem.habit_cardio}} </li>
+       <li>Abs {{mem.habit_abs}}</li>
+       <li>Yoga: {{mem.habit_yoga}}</li>
+        <li> Increase Weight: {{mem.habit_weight}} </li>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Dark Admin</title>
+     
+     </ul>
 
-    <link rel="stylesheet" type="text/css" href="static/bootstrap.min.css" /> 
-    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="static/css/local.css" />
-
-    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-
-    <style>
-        img {
-            filter: gray; /* IE6-9 */
-            -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
-            -webkit-box-shadow: 0px 2px 6px 2px rgba(0,0,0,0.75);
-            -moz-box-shadow: 0px 2px 6px 2px rgba(0,0,0,0.75);
-            box-shadow: 0px 2px 6px 2px rgba(0,0,0,0.75);
-            margin-bottom: 20px;
-        }
-        img:hover {
-            filter: none; /* IE6-9 */
-            -webkit-filter: grayscale(0); /* Google Chrome, Safari 6+ & Opera 15+ */
-        }
-    </style>
-</head>
-<body>
-
-    <div id="wrapper">
-
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">{{ curruser }}</a>
-            </div>
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav side-nav">
-                    <li><a href="index.html"><i class="fa fa-bullseye"></i> My Profile</a></li>
-                    <li><a href="/portfolio"><i class="fa fa-bullseye"></i> Matches</a></li>
-                    <li><a href="/goals"><i class="fa fa-bullseye"></i> Goals</a></li>
-                    
-                             
-                </ul>
+     <li>Lift : {{mem.habit_weight}}</li>
+       {% endfor %}
+     <ul>
+       <li>Sunday:</li>
+       <li>Monday:</li>
+       <li>Tuesday:</li>
+       <li>Wednesday:</li>
+       <li>Thursday:</li>
+       <li>Friday:</li>
+       <li>Saturday:</li>
+     </ul>
+    </ul>
+</div>
+<div class="half-block-right">
+  <h1 class="inset-header">Matches</h1>
+  {% for mem in members %}
+  <div class="mini-profile">
+    <div class="profile-picture pic-small" style="background-image:url(http://www.asdl.gatech.edu/Generic_profile_M.jpg)"></div>
+    <p><strong>{{mem.fname}}</strong><br>{{mem.gender}} - {{mem.age}}</p>
+  </div>
+  {% endfor %}
+    <div class="mini-profile">
+    <div class="profile-picture pic-small" style="background-image:url(https://lh6.googleusercontent.com/-VQVRK5E68Ug/UEC5tTUv6uI/AAAAAAAAAn8/AdjBWmufYkw/w320-h322-no/headshotsm.jpg)"></div>
+    <p><strong>Timothy James</strong><br>Male - 36 Years Old</p>
+  </div>
+  <br>
+</div>
+<div class="half-block-left">
+  <h1 class="inset-header">Message Board</h1>
+      <input type ="text" id="message_text"> <input onclick="sendMessage();" type="button">
+               
+                 <font color="green"> <p id="messages"> </p> </font>
+            <br>
+            {% for curr in posts %}
+                <li class="list-group-item">{{curr.message_text}} </li>
+            {% endfor %}
+            <div id="p1"> </div>
              
-                </ul>
-            </div>
-        </nav>
+          
+</div>
 
-        <hr />
-
-        <div class="container">
-            <div class="row">
-                <div class="text-center">
-                    <h1>My Matches</h1>
-                </div>
-                {% for mem in members %}
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="well">
-                            
-                            <img class="thumbnail img-responsive" alt="" src="http://media-minecraftforum.cursecdn.com/avatars/336/363/635357691690366795.gif" />
-                         
-                            <span>
-                         Name : {{mem.fname}} {{mem.lname}}
-                        <br>
-                         Gender: {{mem.gender}} 
-                         <br>
-                        Contact: {{mem.email}} 
-                         <br>
-                         Cardio: {{mem.habit_cardio}}
-                          <br>
-                            Abs: {{mem.habit_abs}}
-                          <br>
-                            Upper Body: {{mem.habit_upperbody}}
-                          <br>
-                            Treadmill: {{mem.habit_treadmill}}
-                          <br>
-                            Yoga: {{mem.habit_yoga}}
-                          <br>
-                            Gain Weight: {{mem.goal_gain}}
-                          <br>
-                            Lose Weight: {{mem.goal_lose}}
-                          <br>
-                            Endurance: {{mem.goal_endurance}}
-                          <br>
-
-                         Weight: {{habit_weight}}
-                         {{mem.habit_weight}}
-                         {% if "{{mem.habit_weight}}" == "no" %}
-                          <p>equals</p>
-                         {% endif %}
-                            </span>
-                        </div>
-                    </div>
-                    {% endfor %}
-
-
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div>
-        <br>
-        <br>
-        <br>
-        <br>
-<script>
-/*
+ <script>
+   // retrieveMessage();
+function retrieveMessage() {
+   
+       var messageTag = document.getElementById('p1'); 
+       // document.getElementById("p1").innerHTML = "New text!";
+    
+    alert("retrive Message");
+    var xmlHttp = createXmlHttp();
+    xmlHttp.onreadystatechange=function() {
+        if(xmlHttp.readyState == 4) {
+            showMessages(xmlHttp.responseXML);
+        }
+    }
+    xmlHttp.open("GET",'/messages',true);
+    xmlHttp.send();
+}
 function sendMessage() {
+     //document.getElementById("p1").innerHTML = "New text!";
     var inputField = document.getElementById('message_text');
+    var text = inputField.value;
     if(inputField) {
-        var text = inputField.value;
+
+      
+      alert(text);
 
         var xmlHttp = createXmlHttp();
+        xmlHttp.onreadyexchange = function() {
+            if(xmlHttp.readyState == 4) {
+                if(xmlHttp.responseText != 'OK') {
+                alert('ERROR: ' + xmlHttp.responseText)
+            }
+           alert("ready state == 4");
+        }
+    } 
+
+      var parseString = 'text=' + escape(text);
+        xmlHttp.open("POST",'/sendmsg',true);
+        xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlHttp.send(parseString); 
+        document.getElementById('messages').innerHTML = document.getElementById('messages').innerHTML + '<li class="list-group-item">' + text + '</li>';
+
+    }
+        /*
         xmlhttp.onreadyexchange = function() {
             if(xmlHttp.readyState == 4) {
                 if(xmlHttp.responseText != 'OK') {
@@ -134,8 +113,8 @@ function sendMessage() {
         var parseString = 'text=' + escape(text);
         xmlHttp.open("POST",'/sendmsg',true):
         xmlHttp.setRequestHeader("Content-type","application/x-wwww-form-urlencoded");
-        xmlHttp.send(parseString);
-    }
+        xmlHttp.send(parseString);  
+    }   */
 
 
 
@@ -147,27 +126,51 @@ var xmlhttp;
 
 if (window.XMLHttpRequest) {
 
-xmlhttp = new XMLHttpRequest();
+    xmlhttp = new XMLHttpRequest();
 
-} else {
+} 
+else {
 
-xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 
 }
 
 if (!(xmlhttp)) {
 
-alert("Your browser does not support AJAX!");
+    alert("Your browser does not support AJAX!");
 
 }
 
 return xmlhttp;
 
-}   */
+}  
+
+function showMessages(xml) {
+  // document.getElementById("p1").innerHTML = "New text!";
+
+    alert("show message");
+   var text = '';
+   var messages = xml.getElementByTagName("message");
+   //alert(messages.length);
+   for(var i = 0; i < messages.length; i++) {
+        text += '<div class="subject">';
+        text += messages[i].attributes['time'].value;
+        text += ' '; 
+        text += messages[i].attributes['user'].value;    
+        text += 'said:</div>';
+        text += '<div class="messagetext>"';
+        text += messages[i].textContent;
+        text += '</div>';
+    }   
+    var messageTag = document.getElementById('messages'); 
+   document.getElementById("p1").innerHTML = "New text!";
+    if(messageTag) {
+        messages.innerHTML = "erere";
+    }
+
+    setTimeout('retrieveMessages();','2000');
+}
+
+    
 </script>
-
-        <input type ="text" id="message_text"> <input onclick="sendMessage();" type="button">
-    </div>
-
-</body>
-</html>
+{% endblock %}
