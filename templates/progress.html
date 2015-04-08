@@ -1,0 +1,304 @@
+{% extends "template.html" %}
+{% block content %}
+<style>
+input[type="checkbox"]{
+  width: 30px; /*Desired width*/
+  height: 30px; /*Desired height*/
+}
+
+  table, td {
+    border-collapse: separate;
+   border: 1px solid #999;
+}
+</style>
+ <meta charset="utf-8">
+  <title>jQuery UI Datepicker - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script>
+  $(function() {
+    $( "#datepicker" ).datepicker();
+  });
+  </script>
+</head>
+<body>
+
+   
+
+<script>
+var str = "";
+ function sendMessage() {
+   //alert("yoo");
+   var inputField = document.getElementById('datepicker');
+   var val = document.getElementById('pin');
+   var text = inputField.value;
+   var value = val.value;
+    
+   var x=$("#actual").is(":checked");
+   str = str + x + "," +  text + "," + value + "," ;
+   //alert(x)
+  document.getElementById('tbl').innerHTML = document.getElementById('tbl').innerHTML + '<br>' +  text + '&nbsp;&nbsp;&nbsp;&nbsp;' + value;
+ }
+ 
+</script>
+<br>
+<br>
+<font size="6"><b><p align="center" font-size="120%">Welcome to {{prof.fname}} 's profile</p></b></font>
+ 
+ <table border="1" style="width:200">
+  {% if b == "a" %} 
+  
+  <tr>
+      <td><input type="text" id="datepicker" placeholder="date"></td>
+    <td><input type="text" id="pin" maxlength="4" size="4"></td> 
+   <td> <input type="checkbox" id="actual" name="vehicle" value="Actual">Actual<br> </td>
+   <td> <input onclick="sendMessage();" type="button" value="Add to Queue"> </td>
+    <td> <input id = "button" onclick="update()"; type="button" value="Graph!"> </td>
+  </tr>
+  
+ 
+     
+ 
+{% endif %} 
+
+  <br>
+  <br>
+  <br>
+  <br>
+
+
+</table>
+
+ <div id = "tbl" style="float: right;">
+
+</div>
+<br>
+<br>
+
+ 
+
+ <input type ="text" id="message_text"> <input onclick="send()"; type="button" value="Send">
+          <div style="float: left;">
+                 <font color="green"> <p id="messages"> </p> </font>
+            <br>
+            {% for curr in posts %}
+                <li class="list-group-item">{{curr.message_text}} </li>
+            {% endfor %}
+            <div id="p1"> </div>
+        </div>
+<div id="chartContainer" style="display: right; height: 300px; width: 100%;">
+  
+
+
+
+ 
+  <script>
+
+function update(){
+ //("yo");
+  $.ajax({
+  type: "POST",
+  url: "weight",
+  data: "text=" + str,
+  success: function(msg){
+        //alert( "Data Saved: " + msg );
+        location.reload();
+  },
+  error: function(XMLHttpRequest, textStatus, errorThrown) {
+     alert("some error");
+  }
+});
+
+};
+
+
+  $(function() {
+    $( "#datepicker" ).datepicker();
+  });
+  </script>
+  
+<script type="text/javascript">
+window.onload = function () {
+    var chart = new CanvasJS.Chart("chartContainer",
+    {
+        title: {
+            text: "Time vs. Max Weight"               
+        },
+        axisX:{      
+            valueFormatString: "DD-MMM" ,
+            labelAngle: -50
+        },
+        axisY: {
+          valueFormatString: "#,###"
+      },
+
+      data: [
+      {        
+        type: "line",
+        color: "rgba(0,75,141,0.7)",
+        dataPoints: [
+        {% for mem in data %}
+        { x: new Date({{mem.Year}}, {{mem.Month}}, {{mem.Day}}), y: {{mem.Value}}},
+        {% endfor %}
+      /*  { x: new Date(2012, 6, 15), y: 0}, 
+        { x: new Date(2012, 6, 15), y: 0},       
+        { x: new Date(2012, 6, 18), y: 20 }, 
+        { x: new Date(2012, 6, 23), y: 30 }, 
+        { x: new Date(2012, 7, 1), y: 10}, 
+        { x: new Date(2012, 7, 11), y: 21}, 
+        { x: new Date(2012, 7, 23), y: 50} ,
+        { x: new Date(2012, 7, 31), y: 75}, 
+        { x: new Date(2012, 8, 04), y: 10},
+        { x: new Date(2012, 8, 10), y: 12},
+        { x: new Date(2012, 08, 13), y: 15}, 
+        { x: new Date(2012, 08, 16), y: 17}, 
+        { x: new Date(2012, 08, 18), y: 20}, 
+        { x: new Date(2012, 08, 21), y: 22}, 
+        { x: new Date(2012, 08, 24), y: 25}, 
+        { x: new Date(2012, 08, 26), y: 27}, 
+        { x: new Date(2012, 08, 28), y: 30}, */
+        ]
+    },
+     {        
+        type: "line",
+        dataPoints: [
+       {% for mem in goal %}
+        { x: new Date({{mem.Year}}, {{mem.Month}}, {{mem.Day}}), y: {{mem.Value}}},
+        {% endfor %}
+        ]
+      }
+      ]
+    });
+
+chart.render();
+}
+  </script>
+<script>
+
+
+   // retrieveMessage();
+
+function retrieveMessage() {
+   
+       var messageTag = document.getElementById('p1'); 
+       // document.getElementById("p1").innerHTML = "New text!";
+    
+    alert("retrive Message");
+    var xmlHttp = createXmlHttp();
+    xmlHttp.onreadystatechange=function() {
+        if(xmlHttp.readyState == 4) {
+            showMessages(xmlHttp.responseXML);
+        }
+    }
+    xmlHttp.open("GET",'/messages?authorEmail={{prof.email}}&author={{prof.email}}&profile={{prof.email}}',true);
+    xmlHttp.send();
+}
+function send() {
+     //document.getElementById("p1").innerHTML = "New text!";
+    var inputField = document.getElementById('message_text');
+    var text = inputField.value;
+    if(inputField) {
+
+      
+      //alert(text);
+
+        var xmlHttp = createXmlHttp();
+        xmlHttp.onreadyexchange = function() {
+            if(xmlHttp.readyState == 4) {
+                if(xmlHttp.responseText != 'OK') {
+                alert('ERROR: ' + xmlHttp.responseText)
+            }
+           alert("ready state == 4");
+        }
+    } 
+
+      var parseString = 'text=' + escape(text) + '&author='+"{{loggedin.fname}}&profile={{prof.email}}";
+        xmlHttp.open("POST",'/sendmsg',true);
+        xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlHttp.send(parseString); 
+        document.getElementById('messages').innerHTML = document.getElementById('messages').innerHTML + '<li class="list-group-item">' + text + '</li>';
+
+    }
+        /*
+        xmlhttp.onreadyexchange = function() {
+            if(xmlHttp.readyState == 4) {
+                if(xmlHttp.responseText != 'OK') {
+                    alert("Error:" + xmlHttp.responseText)
+                }
+            }
+        }
+        var parseString = 'text=' + escape(text);
+        xmlHttp.open("POST",'/sendmsg',true):
+        xmlHttp.setRequestHeader("Content-type","application/x-wwww-form-urlencoded");
+        xmlHttp.send(parseString);  
+    }   */
+
+
+
+}
+
+function createXmlHttp() {
+
+var xmlhttp;
+
+if (window.XMLHttpRequest) {
+
+    xmlhttp = new XMLHttpRequest();
+
+} 
+else {
+
+    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+
+}
+
+if (!(xmlhttp)) {
+
+    alert("Your browser does not support AJAX!");
+
+}
+
+return xmlhttp;
+
+}  
+
+function showMessages(xml) {
+  // document.getElementById("p1").innerHTML = "New text!";
+
+   // alert("show message");
+   var text = '';
+   var messages = xml.getElementByTagName("message");
+   //alert(messages.length);
+   for(var i = 0; i < messages.length; i++) {
+        text += '<div class="subject">';
+        text += messages[i].attributes['time'].value;
+        text += ' '; 
+        text += messages[i].attributes['user'].value;    
+        text += 'said:</div>';
+        text += '<div class="messagetext>"';
+        text += messages[i].textContent;
+        text += '</div>';
+    }   
+    var messageTag = document.getElementById('messages'); 
+   document.getElementById("p1").innerHTML = "New text!";
+    if(messageTag) {
+        messages.innerHTML = "erere";
+    }
+
+    setTimeout('retrieveMessages();','2000');
+}
+
+    
+</script>
+
+
+
+
+
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.4.1/canvas.min.js"></script>
+<p>Date: <input type="text" id="datepicker"></p>
+{% endblock %}

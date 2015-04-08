@@ -55,10 +55,21 @@ class User(ndb.Model):
 class Matches(webapp2.RequestHandler):
 	def get(self):
 
-		members=User.query().fetch()
+		#members=User.query().fetch()
+		
 		currUser = users.get_current_user()
+		members=User.query(ndb.GenericProperty("email") != currUser.email())
 		q=User.query(ndb.GenericProperty("email") == currUser.email()).fetch(1)
-
+		log=User.query(ndb.GenericProperty("email") == currUser.email()).fetch(1)
+		link = ""
+		link_text = ""
+		user = users.get_current_user()
+		if user:
+			link = users.create_logout_url(self.request.uri)
+			link_text = 'Logout'
+		else:
+			link = users.create_login_url(self.request.uri)
+			link_text = 'Login'
 	#	q = User.query(all()
 		#q.filter("emai; =", "Smith")
 		
@@ -70,6 +81,9 @@ class Matches(webapp2.RequestHandler):
         'curruser': currUser,
         'currStats' : q,
         'posts': posts,
+        'loggedin': log[0],
+        'link': link,
+        'link_text' : link_text
     }
 
 		render_template(self,'portfolio.html',template_values)
@@ -179,7 +193,41 @@ class HandleMessage(webapp2.RequestHandler):
 			self.response.out.write('You are not logged in brah')
 class Newsletter(webapp2.RequestHandler):
 	def get(self):
-		render_template(self,'newsletter.html','')
+		#data=Weight.query().fetch()
+		prof = self.request.get('email')
+		q=User.query(ndb.GenericProperty("email") == prof).fetch(1)
+		link = ""
+		link_text = ""
+		user = users.get_current_user()
+		if user:
+			link = users.create_logout_url(self.request.uri)
+			link_text = 'Logout'
+		else:
+			link = users.create_login_url(self.request.uri)
+			link_text = 'Login'
+		log=User.query(ndb.GenericProperty("email") == user.email()).fetch(1)
+		data=Weight.query(ndb.GenericProperty("email") == prof).fetch()
+		goal=WeightGoal.query(ndb.GenericProperty("email") == prof).fetch()
+		
+		#q=User.query(ndb.GenericProperty("email") == currUser.email()).fetch(1)
+		data.sort(key=lambda r: r.date)
+		goal.sort(key=lambda r: r.date)
+		#posts=InstantPost.query().fetch()
+		posts=InstantPost.query(ndb.GenericProperty("profile") == prof).fetch()
+		template_values = {
+        'data': data,
+        'goal':goal,
+        'posts':posts,
+        'prof': q[0],
+        'curr': " ",
+        'loggedin': log[0],
+        'link_text':link_text,
+        'link' : link,
+        'b': "a",
+
+    }
+
+		render_template(self,'progress.html',template_values)
 
 class Ajax(webapp2.RequestHandler): 
 	def get(self):
@@ -191,6 +239,7 @@ class MessageXml(webapp2.RequestHandler):
 		if user:
 			query = InstantPost.query()
 			query.order(-InstantPost.time)
+			#q=User.query(ndb.GenericProperty("email") == currUser.email()).fetch(1)
 			messages = query.fetch(40)
 
 		template_values = {
@@ -206,6 +255,8 @@ class HandleAjax(webapp2.RequestHandler):
 	def post(self):
 		#urlsafe = self.request.get("text")
 		text = self.request.get('text')
+		author = self.request.get('author')
+		profile = self.request.get('profile')
 		user = users.get_current_user()	
 		if user:
 			email = user.email()
@@ -213,6 +264,8 @@ class HandleAjax(webapp2.RequestHandler):
 			post.message_text = text
 			post.user = email
 			post.time = (int)(time.time())
+			post.author = author
+			post.profile = profile
 			post.put()	
 		#ui = ndb.Key(urlsafe=urlsafe).get()
 		obj={
@@ -226,24 +279,95 @@ class InstantPost(ndb.Model):
 	message_text = ndb.StringProperty()
 	user = ndb.StringProperty()
 	time = ndb.IntegerProperty()
-	'''
+	author = ndb.StringProperty()
+	authorEmail = ndb.StringProperty()
+	profile = ndb.StringProperty()
 
-class HandleMessage(webabb2.RequestHandler):
+class Weight(ndb.Model):
+	Year = ndb.IntegerProperty()
+	Month = ndb.IntegerProperty()
+	Day = ndb.IntegerProperty()
+	Value = ndb.IntegerProperty()
+	prop = ndb.StringProperty()
+	date = ndb.DateTimeProperty()
+	email = ndb.StringProperty()
+
+class WeightGoal(ndb.Model):
+	Year = ndb.IntegerProperty()
+	Month = ndb.IntegerProperty()
+	Day = ndb.IntegerProperty()
+	Value = ndb.IntegerProperty()
+	prop = ndb.StringProperty()
+	date = ndb.DateTimeProperty()
+	email = ndb.StringProperty()
+
+class AddWeight(webapp2.RequestHandler):
+	def post(self):
+		user = users.get_current_user()
+		text = self.request.get('text')
+		arr = text.split(',')
+		for i in range(len(arr)-1):
+			if not arr:
+				break
+			actual = arr.pop(0)
+			if not arr:
+				break
+			date = arr.pop(0)
+			if not arr:
+				break
+			value = arr.pop(0)
+			if(actual == "true"):
+				weight = Weight()
+				weight.Value = int(value)
+				lst = date.split("/")
+				weight.Month = int(lst.pop(0)) -1
+				weight.Day = int(lst.pop(0)) 
+				weight.Year = int(lst.pop(0))
+				weight.date = datetime.datetime(weight.Year, weight.Month, weight.Day, 13, 34, 5, 787000)
+				weight.email = user.email()
+				#weight.Value = value
+				weight.put()
+			elif(actual == "false"):
+				weight = WeightGoal()
+				weight.Value = int(value)
+				lst = date.split("/")
+				weight.Month = int(lst.pop(0)) -1
+				weight.Day = int(lst.pop(0)) 
+				weight.Year = int(lst.pop(0))
+				weight.date = datetime.datetime(weight.Year, weight.Month, weight.Day, 13, 34, 5, 787000)
+				weight.email = user.email()
+				#weight.Value = value
+				weight.put()
+
+			
+		#val = newstr.split(",")
+		#weight = Weight()
+		#weight.prop = val.pop()
+		#weight.put()
+	user = users.get_current_user()
+		#if user:
+		#	weight = Weight()	
+		#	weight.Year = 1
+		#	weight.put()
+
+class HandleMessage(webapp2.RequestHandler):
 	def post(self):
 		text = self.request.get('text')
 		user = users.get_current_user()
+		author = self.request.get('author')
 		if user:
 			email = user.email()
 			post = InstantPost()
 			post.message_text = text;
 			post.user = email
 			post.time = int(time.time())
+			post.author = "i"
 			post.put()
 
 			self.response.out.write('OK')
 
 		else:
-			self.out.write('You are not LOGGED in') '''
+			self.out.write('You are not LOGGED in') 
 
 class Login(webapp2.RequestHandler):
 	def get(self):
@@ -253,7 +377,7 @@ class Login(webapp2.RequestHandler):
 			#self.out.response.write('<html><body>')
 			#self.out.response.write({{user.email}})
 			self.response.out.write('<html><body>')
-			
+			#href="/edit?uid=
 			self.response.out.write('Hello, ' + user.email() +  'Click <a href="')
 			self.response.out.write(url)
 			self.response.out.write('">here</a> to log out.')
@@ -277,7 +401,8 @@ app = webapp2.WSGIApplication([
 	('/messages',MessageXml),
 	('/ajax',Ajax),
 	('/su',ConfirmUserSignup),
-	('/newsletter',Newsletter)
+	('/newsletter',Newsletter),
+	('/weight',AddWeight)
 	
 	
 

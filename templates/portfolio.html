@@ -3,7 +3,7 @@
 <div class="half-block-left">
     <h1 class="inset-header">My Profile</h1>
     <div class="profile-picture pic-medium" style="margin-right:-5%;margin-bottom:4%;box-shadow:0 0 5px #eee;position:relative;left:-9%; background-image:url(https://scontent-lga.xx.fbcdn.net/hphotos-xaf1/v/t1.0-9/998712_10201566742429760_1837437532_n.jpg?oh=98969f9bdc1489785f37b2d6a4020d37&amp;oe=5580957B)"></div>
-    <p class="my-mini-profile"><strong>{{curruser.email}}</strong><br>Male - 23 Years Old</p>
+    <p class="my-mini-profile"><strong>{{loggedin.fname}}</strong><br>Male - 23 Years Old</p>
     <div class="clear"></div>
     
     <ul class="matches-my-profile">
@@ -36,7 +36,8 @@
   {% for mem in members %}
   <div class="mini-profile">
     <div class="profile-picture pic-small" style="background-image:url(http://www.asdl.gatech.edu/Generic_profile_M.jpg)"></div>
-    <p><strong>{{mem.fname}}</strong><br>{{mem.gender}} - {{mem.age}}</p>
+    <!--href="/edit?uid= !-->
+    <a href="/newsletter?email={{mem.email}}"><strong>{{mem.fname}}</strong><br>{{mem.gender}} - {{mem.age}}</a>
   </div>
   {% endfor %}
     <div class="mini-profile">
@@ -83,7 +84,7 @@ function sendMessage() {
     if(inputField) {
 
       
-      alert(text);
+      //alert(text);
 
         var xmlHttp = createXmlHttp();
         xmlHttp.onreadyexchange = function() {
@@ -91,7 +92,7 @@ function sendMessage() {
                 if(xmlHttp.responseText != 'OK') {
                 alert('ERROR: ' + xmlHttp.responseText)
             }
-           alert("ready state == 4");
+           //alert("ready state == 4");
         }
     } 
 
@@ -148,7 +149,7 @@ return xmlhttp;
 function showMessages(xml) {
   // document.getElementById("p1").innerHTML = "New text!";
 
-    alert("show message");
+   // alert("show message");
    var text = '';
    var messages = xml.getElementByTagName("message");
    //alert(messages.length);
