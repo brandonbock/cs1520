@@ -48,6 +48,8 @@ class User(ndb.Model):
 	time_fri=ndb.StringProperty()
 	time_sat=ndb.StringProperty()
 	time_sun=ndb.StringProperty()
+	skill_level=ndb.IntegerProperty()
+	matchingpoints=ndb.IntegerProperty()
 
 
 
@@ -59,9 +61,68 @@ class Matches(webapp2.RequestHandler):
 		#members=User.query().fetch()
 		
 		currUser = users.get_current_user()
-		members=User.query(ndb.GenericProperty("email") != currUser.email())
+
+		
 		q=User.query(ndb.GenericProperty("email") == currUser.email()).fetch(1)
 		log=User.query(ndb.GenericProperty("email") == currUser.email()).fetch(1)
+
+		x=int(log[0].skill_level)
+		upbound=x+15
+		lowbound=x-15
+
+		mem=User.query();
+		for m in mem:
+			if(m.email is log[0].email):
+				continue
+			points=int (0);
+			if m.habit_weight==log[0].habit_weight:
+				points=points+10
+			if m.habit_yoga==log[0].habit_yoga:
+				points=points+10
+			if m.habit_cardio==log[0].habit_cardio:
+				points=points+10
+			if m.habit_abs==log[0].habit_abs:
+				points=points+10
+			if m.habit_upperbody==log[0].habit_upperbody:
+				points=points+10
+			if m.habit_treadmill==log[0].habit_treadmill:
+				points=points+10
+			if m.goal_lose==log[0].goal_lose:
+				points=points+30
+			if m.goal_gain==log[0].goal_gain:
+				points=points+30
+			if m.goal_enduarance==log[0].goal_enduarance:
+				points=points+30
+			
+			if m.time_mon==log[0].time_mon:
+				points=points+5
+			if m.time_tue==log[0].time_tue:
+				points=points+5
+			if m.time_wed==log[0].time_wed:
+				points=points+5
+			if m.time_thu==log[0].time_thu:
+				points=points+5
+			if m.time_fri==log[0].time_fri:
+				points=points+5
+			if m.time_sat==log[0].time_sat:
+				points=points+5
+			if m.time_sun==log[0].time_sun:
+				points=points+5
+			if m.skill_level>lowbound and m.skill_level<upbound:
+				points=points+65
+			if m.email==log[0].email:
+				points=-10000
+			m.matchingpoints= int(points)
+			m.put();
+			#max points is 250 points
+		
+		#members=User.query(ndb.GenericProperty("email") != currUser.email() )
+		#and ndb.GenericProperty("skill_level")<upbound and ndb.GenericProperty("skill_level")>lowbound
+		members=User.query().order(-User.matchingpoints)
+		members=members.fetch(5)
+		for m in members:
+			if m.email == log[0].email:
+				members.remove(m)
 		link = ""
 		link_text = ""
 		user = users.get_current_user()
@@ -79,6 +140,7 @@ class Matches(webapp2.RequestHandler):
         'fname': range(1),
         'lname': range(7),
         'members': members,
+        #'members': list_user,
         'curruser': currUser,
         'currStats' : q,
         'posts': posts,
@@ -175,7 +237,7 @@ class ProcessForm(webapp2.RequestHandler):
 		user.time_sun=self.request.get("sun", default_value="no")
 
 		#skill level
-		user.skill_level=self.request.get('skill')
+		user.skill_level=int(self.request.get('skill'))
 		user.registered = 1;
 
 		
@@ -185,6 +247,137 @@ class ProcessForm(webapp2.RequestHandler):
 
 
 		self.redirect('portfolio')
+
+class EditForm(webapp2.RequestHandler):
+	def post(self):
+		
+		currUser = users.get_current_user()
+		user=User.query(ndb.GenericProperty("email") == currUser.email()).fetch(1)
+		#self.response.out.write(user[0].fname)
+		#user[0].fname = "a"
+		#user[0].put()
+		#bio
+		#Work habit
+		user[0].habit_weight=self.request.get("weight", default_value="no")
+		user[0].habit_cardio=self.request.get("cardio", default_value="no")
+		user[0].habit_abs=self.request.get("abs", default_value="no")
+		user[0].habit_upperbody=self.request.get("upperbody", default_value="no")
+		user[0].habit_treadmill=self.request.get("treadmill", default_value="no")
+		user[0].habit_yoga=self.request.get("yoga", default_value="no")
+
+		#Workout goals
+		user[0].goal_gain=self.request.get("gainMuscle", default_value="no")
+		user[0].goal_lose=self.request.get("loseweight", default_value="no")
+		user[0].goal_enduarance=self.request.get("enduarance", default_value="no")
+
+		#Workout time
+		user[0].time_mon=self.request.get("mon", default_value="no")
+		user[0].time_tue=self.request.get("tue", default_value="no")
+		user[0].time_wed=self.request.get("wed", default_value="no")
+		user[0].time_thu=self.request.get("thu", default_value="no")
+		user[0].time_fri=self.request.get("fri", default_value="no")
+		user[0].time_sat=self.request.get("sat", default_value="no")
+		user[0].time_sun=self.request.get("sun", default_value="no")
+
+		#skill level
+		user[0].skill_level=int(self.request.get('skill'))
+		user[0].registered = 1; 
+		user[0].put()
+		#user.put()
+
+		q=User.query(ndb.GenericProperty("email") == currUser.email()).fetch(1)
+		log=User.query(ndb.GenericProperty("email") == currUser.email()).fetch(1)
+
+		x=int(log[0].skill_level)
+		upbound=x+15
+		lowbound=x-15
+
+		mem=User.query();
+		for m in mem:
+			points=int (0);
+			if m.habit_weight==log[0].habit_weight:
+				points=points+10
+			if m.habit_yoga==log[0].habit_yoga:
+				points=points+10
+			if m.habit_cardio==log[0].habit_cardio:
+				points=points+10
+			if m.habit_abs==log[0].habit_abs:
+				points=points+10
+			if m.habit_upperbody==log[0].habit_upperbody:
+				points=points+10
+			if m.habit_treadmill==log[0].habit_treadmill:
+				points=points+10
+			if m.goal_lose==log[0].goal_lose:
+				points=points+30
+			if m.goal_gain==log[0].goal_gain:
+				points=points+30
+			if m.goal_enduarance==log[0].goal_enduarance:
+				points=points+30
+			
+			if m.time_mon==log[0].time_mon:
+				points=points+5
+			if m.time_tue==log[0].time_tue:
+				points=points+5
+			if m.time_wed==log[0].time_wed:
+				points=points+5
+			if m.time_thu==log[0].time_thu:
+				points=points+5
+			if m.time_fri==log[0].time_fri:
+				points=points+5
+			if m.time_sat==log[0].time_sat:
+				points=points+5
+			if m.time_sun==log[0].time_sun:
+				points=points+5
+			if m.skill_level>lowbound and m.skill_level<upbound:
+				points=points+65
+			if m.email==log[0].email:
+				points=-10000
+			m.matchingpoints= int(points)
+			m.put();
+			#max points is 250 points
+		
+		#members=User.query(ndb.GenericProperty("email") != currUser.email() )
+		#and ndb.GenericProperty("skill_level")<upbound and ndb.GenericProperty("skill_level")>lowbound
+		members=User.query().order(-User.matchingpoints)
+
+		members=members.fetch(5)
+		link = ""
+		link_text = ""
+		user = users.get_current_user()
+		if user:
+			link = users.create_logout_url(self.request.uri)
+			link_text = 'Logout'
+		else:
+			link = users.create_login_url(self.request.uri)
+			link_text = 'Login'
+	#	q = User.query(all()
+		#q.filter("emai; =", "Smith")
+		
+ 		posts=InstantPost.query().fetch()
+		template_values = {
+        'fname': range(1),
+        'lname': range(7),
+        'members': members,
+        #'members': list_user,
+        'curruser': currUser,
+        'currStats' : q,
+        'posts': posts,
+        'loggedin': log[0],
+        'link': link,
+        'link_text' : link_text
+    }
+
+		render_template(self,'portfolio.html',template_values)
+
+		
+
+
+
+		#self.redirect('portfolio')
+
+		
+		
+
 		
 		
 class HandleMessage(webapp2.RequestHandler):
@@ -317,12 +510,27 @@ class EditProfile(webapp2.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		q=User.query(ndb.GenericProperty("email") == user.email()).fetch(1)
+		link = ""
+		link_text = ""
+		user = users.get_current_user()
+		if user:
+			link = users.create_logout_url(self.request.uri)
+			link_text = 'Logout'
+		else:
+			link = users.create_login_url(self.request.uri)
+			link_text = 'Login'
+
+
 		if user:
 			mail = user.email()
 			template_values = {
-        	'currStats' : q
+        	'currStats' : q[0],
+        	#'loggedin': log[0],
+        	'link': link,
+        	'link_text' : link_text,
+        	'loggedin' : q[0]
     		}
-			render_template(self,'edit.html','template_values')
+			render_template(self,'edit.html',template_values)
 
 class AddWeight(webapp2.RequestHandler):
 	def post(self):
@@ -416,6 +624,7 @@ class Login(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
 	('/',MainPage),
 	('/processform',ProcessForm),
+	('/editform',EditForm),
 	('/portfolio',Matches),
 	('/login',Login),
 	('/goals',Goals),

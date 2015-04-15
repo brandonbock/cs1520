@@ -5,10 +5,10 @@
     <br>
      <p style="font-size:30px">Edit Your Profile</p> </b>
 		<br>
-	<form method="post" action="/processform">
+	<form method="post" action="/editform">
 		
-		<input type = "text" name = "fname" placeholder="First Name"> 
-		<input type = "text" name = "lname" placeholder="Last Name">
+		<input type = "text" name = "fname" placeholder="{{currStats.habit_weight}}"> 
+		<input type = "text" name = "lname" placeholder="{{currStats.lname}}">
 		
 		<br> 
 		<br> 
@@ -175,23 +175,105 @@
 <option value="1909">1909</option>
 </select><br><br>
 
- <p style="font-size:14px">Workout Habits: Check all that apply </p> 
+ <p style="font-size:14px">Workout Habits: Check all that apply {{currStats.habit_weight}}</p> 
     <p></p>
 
-      Weights<input type="radio" name="weight" value="weights" display="inline">
-      Cardio <input type="radio" name="cardio" value="cardio" display:"inline">
-      Abs<input type="radio" name="abs" value="abs"> 
-      Upper Body<input type="radio" name="upperbody" value="upper"> 
-      Treadmill<input type="radio" name="treadmill" value="treadmill"> 
-      Yoga<input type="radio" name="yoga" value="yoga">
+      {% if currStats.habit_weight  == 'weights'%}
+      Weights<input type="checkbox" name="weight" value="weights" display="inline" checked == "checked">
+      {% endif %}
+
+      {% if currStats.habit_weight  != 'weights'%}
+      Weights<input type="checkbox" name="weight" value="weights" display="inline">
+      {% endif %}
+
+       {% if currStats.habit_cardio  == 'cardio'%}
+        Cardio <input type="checkbox" name="cardio" value="cardio" display:"inline" checked = "checked">
+      {% endif %}
+
+      {% if currStats.habit_cardio  != 'cardio'%}
+        Cardio <input type="radio" name="cardio" value="cardio" display:"inline">
+      {% endif %}
+
+
+
+       {% if currStats.habit_abs  == 'abs'%}
+      Abs<input type="checkbox" name="abs" value="abs" checked = "checked"> 
+      {% endif %}
+
+      {% if currStats.habit_abs  != 'abs'%}
+      Abs<input type="checkbox" name="abs" value="abs"> 
+      {% endif %}
+
+
+
+       {% if currStats.habit_upperbody  == 'upper'%}
+       Upper Body<input type="checkbox" name="upperbody" value="upper" checked ="true"> 
+      {% endif %}
+
+      {% if currStats.habit_upperbody  != 'upper'%}
+        Upper Body<input type="checkbox" name="upperbody" value="upper"> 
+      {% endif %}
+      
+  
+
+       {% if currStats.habit_treadmill  == 'treadmill'%}
+        Treadmill<input type="checkbox" name="treadmill" value="treadmill" checked = "true">  
+      {% endif %}
+
+      {% if currStats.habit_treadmill  != 'treadmill'%}
+         Treadmill<input type="checkbox" name="treadmill" value="treadmill"> 
+      {% endif %}      
+
+      {% if currStats.habit_yoga  == 'yoga'%}
+              Yoga<input type="checkbox" name="yoga" value="yoga" checked="true">
+      {% endif %}
+
+      {% if currStats.habit_yoga  != 'yoga'%}
+               Yoga<input type="checkbox" name="yoga" value="yoga">
+      {% endif %}      
+
+
+
+
+      
+
       <br>
       <br>
      
 
       Workout goals:<br>
-      Gain muscle:<input type="radio" name="gainMuscle"> 
-      Lose weight:<input type="radio" name="loseweight">
-      Enduarance:<input type="radio" name="enduarance">
+
+ {% if currStats.goal_gain  == 'on'%}
+                Gain muscle:<input type="checkbox" name="gainMuscle" checked="true">
+      {% endif %}
+
+  {% if currStats.goal_gain  == 'no'%} 
+    Gain muscle:<input type="checkbox" name="gainMuscle" >
+     {% endif %}
+
+     
+  
+ {% if currStats.goal_lose  == 'on'%}
+                 Lose weight:<input type="checkbox" name="loseweight" checked="true">
+      {% endif %}
+
+ {% if currStats.goal_lose  != 'on'%}
+                 Lose weight:<input type="checkbox" name="loseweight" >
+      {% endif %}
+
+
+ {% if currStats.goal_endurance  == 'on'%}
+                  Enduarance:<input type="checkbox" name="enduarance" checked ="true">
+      {% endif %}
+
+ {% if currStats.goal_endurance  != 'on'%}
+                  Enduarance:<input type="checkbox" name="enduarance" >
+      {% endif %}
+
+        
+
+
+ 
       <br><br>
       
 

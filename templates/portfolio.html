@@ -7,28 +7,35 @@
     <div class="clear"></div>
     
     <ul class="matches-my-profile">
-     <li><strong>Workout Habits:</strong></li>
-     <ul>
-        {% for mem in currStats %}
-       <li>Cardio: {{mem.habit_cardio}} </li>
-       <li>Abs {{mem.habit_abs}}</li>
-       <li>Yoga: {{mem.habit_yoga}}</li>
-        <li> Increase Weight: {{mem.habit_weight}} </li>
+     <li><strong>Workout Habits: </strong></li>
+<ul>
+     {% if loggedin.habit_cardio == "cardio" %}
+                  <li>Cardio</li>
+            {% endif %}
+            {% if loggedin.habit_abs == "abs" %}
+                  <li>Abs </li>
+            {% endif %}
+            {% if loggedin.habit_weight == "weight" %}
+                  <li>Increase weight </li>
+            {% endif %}
 
+            {% if loggedin.habit_treadmill == "treadmill" %}
+                  <li>Treadmill </li>
+            {% endif %}
+
+            {% if loggedin.habit_upperbody == "upperbody" %}
+                  <li>Upper Body </li>
+            {% endif %}
+            {% if loggedin.habit_yoga == "yoga" %}
+                  <li>Yoga </li>
+            {% endif %}
+
+</ul>
+    
+
+       
+     <ul>
      
-     </ul>
-
-     <li>Lift : {{mem.habit_weight}}</li>
-       {% endfor %}
-     <ul>
-       <li>Sunday:</li>
-       <li>Monday:</li>
-       <li>Tuesday:</li>
-       <li>Wednesday:</li>
-       <li>Thursday:</li>
-       <li>Friday:</li>
-       <li>Saturday:</li>
-     </ul>
     </ul>
 </div>
 <div class="half-block-right">
