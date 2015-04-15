@@ -24,6 +24,7 @@ def render_template(handler, templatename,templatevalues):
 	handler.response.out.write(html)
 
 class User(ndb.Model):
+	registered = ndb.IntegerProperty()
 	email = ndb.StringProperty()
 	fname=ndb.StringProperty()
 	lname=ndb.StringProperty()	
@@ -102,17 +103,28 @@ class MainPage(webapp2.RequestHandler):
 			self.response.out.write(url)
 			self.response.out.write('">here</a> to log out.')
 			self.response.out.write('</body></html>')
+
+			members=User.query().fetch()
+			currUser=User.query(ndb.GenericProperty("email") == user.email()).fetch(1)
+
+			if len(currUser) is 1:
+				self.response.out.write('n if')
+				if currUser[0].registered is 1:
+					self.redirect('portfolio')
+		
+			template_values = {
+        	'fname': range(1),
+        	'lname': range(7),
+        	'members': members,
+   		 	}
+
+			render_template(self,'index.html',template_values)
 		else:
 			url = users.create_login_url()
 			self.redirect(url)
-		members=User.query().fetch()
-		template_values = {
-        'fname': range(1),
-        'lname': range(7),
-        'members': members,
-    }
+		
 
-		render_template(self,'index.html',template_values)
+		
 
 class Goals(webapp2.RequestHandler):
 	def get(self):
@@ -164,7 +176,7 @@ class ProcessForm(webapp2.RequestHandler):
 
 		#skill level
 		user.skill_level=self.request.get('skill')
-
+		user.registered = 1;
 
 		
 		user.put()
@@ -301,6 +313,17 @@ class WeightGoal(ndb.Model):
 	date = ndb.DateTimeProperty()
 	email = ndb.StringProperty()
 
+class EditProfile(webapp2.RequestHandler):
+	def get(self):
+		user = users.get_current_user()
+		q=User.query(ndb.GenericProperty("email") == user.email()).fetch(1)
+		if user:
+			mail = user.email()
+			template_values = {
+        	'currStats' : q
+    		}
+			render_template(self,'edit.html','template_values')
+
 class AddWeight(webapp2.RequestHandler):
 	def post(self):
 		user = users.get_current_user()
@@ -331,7 +354,7 @@ class AddWeight(webapp2.RequestHandler):
 				weight = WeightGoal()
 				weight.Value = int(value)
 				lst = date.split("/")
-				weight.Month = int(lst.pop(0)) -1
+				weight.Month = int(lst.pop(0)) 
 				weight.Day = int(lst.pop(0)) 
 				weight.Year = int(lst.pop(0))
 				weight.date = datetime.datetime(weight.Year, weight.Month, weight.Day, 13, 34, 5, 787000)
@@ -402,7 +425,8 @@ app = webapp2.WSGIApplication([
 	('/ajax',Ajax),
 	('/su',ConfirmUserSignup),
 	('/newsletter',Newsletter),
-	('/weight',AddWeight)
+	('/weight',AddWeight),
+	('/edit',EditProfile)
 	
 	
 

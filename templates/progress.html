@@ -48,7 +48,7 @@ var str = "";
 <font size="6"><b><p align="center" font-size="120%">Welcome to {{prof.fname}} 's profile</p></b></font>
  
  <table border="1" style="width:200">
-  {% if b == "a" %} 
+  {% if prof == loggedin %} 
   
   <tr>
       <td><input type="text" id="datepicker" placeholder="date"></td>
@@ -140,7 +140,7 @@ window.onload = function () {
         color: "rgba(0,75,141,0.7)",
         dataPoints: [
         {% for mem in data %}
-        { x: new Date({{mem.Year}}, {{mem.Month}}, {{mem.Day}}), y: {{mem.Value}}},
+        { x: new Date({{mem.Year}}, {{mem.Month }} - 1, {{mem.Day}}), y: {{mem.Value}}},
         {% endfor %}
       /*  { x: new Date(2012, 6, 15), y: 0}, 
         { x: new Date(2012, 6, 15), y: 0},       
@@ -165,7 +165,7 @@ window.onload = function () {
         type: "line",
         dataPoints: [
        {% for mem in goal %}
-        { x: new Date({{mem.Year}}, {{mem.Month}}, {{mem.Day}}), y: {{mem.Value}}},
+        { x: new Date({{mem.Year}}, {{mem.Month}} - 1, {{mem.Day}}), y: {{mem.Value}}},
         {% endfor %}
         ]
       }
